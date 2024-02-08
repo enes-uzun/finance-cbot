@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 st.title("BIGDaTA_Lab Chatbot")
-openai.api_key = config.api_key
+openai.api_key = "OPEN_AI_KEY"
 logging.basicConfig(filename='C:\\Users\\enes.uzun\\PycharmProjects\\YF_cbot\\gerekliler\\stockGPT.logstockGPT.log',
                     level=logging.INFO, format='%(asctime)s - %(message)s', encoding='utf-8')  # encoding ekleyin
 
