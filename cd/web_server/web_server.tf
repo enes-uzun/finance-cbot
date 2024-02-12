@@ -15,6 +15,7 @@ resource "aws_instance" "web_ec2" {
   tags = {
     Name = "Web Server"
   }
+  iam_instance_profile = "gpt_server_profile"  
   user_data = file("./web_server/script.sh")
   vpc_security_group_ids = [var.security_group_id]
   subnet_id  = var.subnet_id
@@ -45,10 +46,9 @@ resource "aws_iam_role_policy_attachment" "s3_access" {
   role       = aws_iam_role.ec2_role.name
 }
 
-# Attach IAM role to EC2 instance
-resource "aws_instance_iam_instance_profile" "ec2_instance_profile" {
-  instance_profile = aws_iam_role.ec2_role.name
-  instance_id      = aws_instance.web_ec2.id
+resource "aws_iam_instance_profile" "ec2_instance_profile" {
+  name = "gpt_server_profile"
+  role = aws_iam_role.ec2_role.name
 }
 
 data "aws_iam_policy_document" "parameter_store_policy" {
