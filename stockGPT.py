@@ -29,11 +29,27 @@ def get_stock_price(ticker):
     except Exception as e:
         return f"Veri alınırken bir hata oluştu: {e}"
 
+
 def get_CPI(country_code, year, month):
     # Get Consumer Price Index
     data_file = pd.read_excel(CPI_Data_Address, sheet_name=country_code, header=None)
-    cell_value = data_file.iloc[int(year)-1999, int(month)]
+    cell_value = data_file.iloc[int(year) - 1999, int(month)]
     return str(cell_value)
+
+
+def plot_CPI(country_code, start_year, start_year_month, end_year, end_year_month):
+    # TODO
+    # data = yf.Ticker(ticker).history(period="1y")
+    # plt.figure(figsize=(10, 5))
+    # plt.plot(data.index, data.Close)
+    # plt.title(f'{ticker} Geçen Yıla Göre Hisse Fiyatı')
+    # plt.xlabel('Tarih')
+    # plt.ylabel('Hisse Fiyatı ')
+    # plt.grid(True)
+    # plt.savefig('stock.png')
+    # plt.close()
+    return 0
+
 
 def calculate_SMA(ticker, window):
     data = yf.Ticker(ticker).history(period="1y").Close
@@ -329,7 +345,8 @@ if prompt := st.chat_input("Selam! Nasıl yardımcı olabilirim?"):
                 if month_value is None:
                     month_value = 1
 
-                args_dict = {'country_code': function_args.get('country_code'), 'year': year_value, 'month': month_value}
+                args_dict = {'country_code': function_args.get('country_code'), 'year': year_value,
+                             'month': month_value}
             elif function_name in ['report']:
                 args_dict = {}
 
@@ -346,7 +363,7 @@ if prompt := st.chat_input("Selam! Nasıl yardımcı olabilirim?"):
                         'name': function_name,
                         'content': function_response
                     }
-                )#ft:gpt-3.5-turbo-1106:yat-r-m-finansman::8a5s7YU0
+                )  # ft:gpt-3.5-turbo-1106:yat-r-m-finansman::8a5s7YU0
                 second_response = openai.ChatCompletion.create(
                     model='gpt-4-1106-preview',
                     messages=st.session_state['messages']
