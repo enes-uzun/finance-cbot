@@ -1,0 +1,6 @@
+matplotlib
+yfinance
+streamlit
+openai
+config
+smart_open[s3]

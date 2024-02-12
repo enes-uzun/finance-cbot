@@ -8,16 +8,16 @@ from streamlit.runtime.scriptrunner import get_script_run_ctx
 import yfinance as yf
 import matplotlib.pyplot as plt
 import pandas as pd
-
+from smart_open import open
 st.title("BIGDaTA_Lab Chatbot")
 openai.api_key = "OPEN_AI_KEY"
-logging.basicConfig(filename='C:\\Users\\enes.uzun\\PycharmProjects\\YF_cbot\\gerekliler\\stockGPT.logstockGPT.log',
+logging.basicConfig(filename='./stockGPT.logstockGPT.log',
                     level=logging.INFO, format='%(asctime)s - %(message)s', encoding='utf-8')  # encoding ekleyin
 
 # Veriyi yükle
-with open('C:\\Users\\enes.uzun\\PycharmProjects\\YF_cbot\\gerekliler\\training_data.json', 'r', encoding='utf-8') as f:
+with open('./training_data.json', 'r', encoding='utf-8') as f:
     veri = json.load(f)
-with open('C:\\Users\\enes.uzun\\PycharmProjects\\YF_cbot\\gerekliler\\hesap_botu.json', 'r', encoding='utf-8') as f:
+with open('./hesap_botu.json', 'r', encoding='utf-8') as f:
     veri2 = json.load(f)
 
 
