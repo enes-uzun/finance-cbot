@@ -10,14 +10,16 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 st.title("BIGDaTA_Lab Chatbot")
-openai.api_key = "OPEN_AI_KEY"
-logging.basicConfig(filename='C:\\Users\\enes.uzun\\PycharmProjects\\YF_cbot\\gerekliler\\stockGPT.logstockGPT.log',
+openai.api_key = "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"
+logging.basicConfig(filename='C:\\Users\\Ali Onur\\Desktop\\finbot\\logs\\stockGPT.logstockGPT.log',
                     level=logging.INFO, format='%(asctime)s - %(message)s', encoding='utf-8')  # encoding ekleyin
 
+CPI_Data_Address = "C:\\Users\\Ali Onur\\Desktop\\finbot\\finance-cbot\\CPI_DATA.xls"
+
 # Veriyi yükle
-with open('C:\\Users\\enes.uzun\\PycharmProjects\\YF_cbot\\gerekliler\\training_data.json', 'r', encoding='utf-8') as f:
+with open('C:\\Users\\Ali Onur\\Desktop\\finbot\\finance-cbot\\training_data.json', 'r', encoding='utf-8') as f:
     veri = json.load(f)
-with open('C:\\Users\\enes.uzun\\PycharmProjects\\YF_cbot\\gerekliler\\hesap_botu.json', 'r', encoding='utf-8') as f:
+with open('C:\\Users\\Ali Onur\\Desktop\\finbot\\finance-cbot\\hesap_botu.json', 'r', encoding='utf-8') as f:
     veri2 = json.load(f)
 
 
@@ -27,6 +29,11 @@ def get_stock_price(ticker):
     except Exception as e:
         return f"Veri alınırken bir hata oluştu: {e}"
 
+def get_CPI(country_code, year, month):
+    # Get Consumer Price Index
+    data_file = pd.read_excel(CPI_Data_Address, sheet_name=country_code, header=None)
+    cell_value = data_file.iloc[int(year)-1999, int(month)]
+    return str(cell_value)
 
 def calculate_SMA(ticker, window):
     data = yf.Ticker(ticker).history(period="1y").Close
@@ -76,7 +83,7 @@ def plot_stock_price(ticker):
 
 
 def report():
-    return ("Enes Uzun tarafından raporlanmıştır.")
+    return ("Enes Uzun & Ali Onur Aslan tarafından raporlanmıştır.")
 
 
 available_fuctions = {
@@ -86,10 +93,37 @@ available_fuctions = {
     'calculate_RSI': calculate_RSI,
     'calculate_MACD': calculate_MACD,
     'plot_stock_price': plot_stock_price,
+    'get_CPI': get_CPI,
     'report': report
 }
 
 functions = [
+    {
+        'name': 'get_CPI',
+        'description': 'Gets the consumer price index of country in the given time',
+        'parameters': {
+            'type': 'object',
+            'properties': {
+                'country_code': {
+                    'type': 'string',
+                    'description': 'Country code of the country, (for exmple TR for Turkey, and NL for the Netherlands)'
+
+                },
+                'year': {
+                    'type': 'string',
+                    'description': "This value represents the desired year of the CPI value for the desired country"
+
+                },
+                'month': {
+                    'type': 'string',
+                    'description': "This value represents the numerical value of desired month of the CPI value for the desired country. (Ex. 7 for july)"
+
+                },
+            },
+            'required': ['country_code']
+
+        }
+    },
     {
         'name': 'get_stock_price',
         'description': 'Gets the latest stock price given the ticker symbol of a company.',
@@ -206,8 +240,9 @@ functions = [
 
 def chat_with_gpt3(message):
     response = openai.ChatCompletion.create(
-        model="gpt-4-1106-preview",
+        model="gpt-3.5-turbo",
         # ft:gpt-3.5-turbo-1106:yat-r-m-finansman::8a5s7YU0
+        # gpt-4-1106-preview
         messages=[
             {"role": "system", "content": veri},
             {"role": "system",
@@ -285,6 +320,16 @@ if prompt := st.chat_input("Selam! Nasıl yardımcı olabilirim?"):
                 args_dict = {'ticker': function_args.get('ticker')}
             elif function_name in ['calculate_SMA', 'calculate_EMA']:
                 args_dict = {'ticker': function_args.get('ticker'), 'window': function_args.get('window')}
+            elif function_name in ['get_CPI']:
+
+                year_value = function_args.get('year')
+                if year_value is None:
+                    year_value = 2024
+                month_value = function_args.get('month')
+                if month_value is None:
+                    month_value = 1
+
+                args_dict = {'country_code': function_args.get('country_code'), 'year': year_value, 'month': month_value}
             elif function_name in ['report']:
                 args_dict = {}
 
