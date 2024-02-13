@@ -1,6 +1,6 @@
 matplotlib
 yfinance
 streamlit
-openai
+openai==0.28
 config
-smart_open[s3]
+openpyxl

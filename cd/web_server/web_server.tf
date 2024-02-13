@@ -15,8 +15,8 @@ resource "aws_instance" "web_ec2" {
   tags = {
     Name = "Web Server"
   }
-  iam_instance_profile = "gpt_server_profile"  
-  user_data = file("./web_server/script.sh")
+  #iam_instance_profile = "gpt_server_profile"  
+  user_data = filebase64("${path.module}/scriptb64.sh")
   vpc_security_group_ids = [var.security_group_id]
   subnet_id  = var.subnet_id
   private_ip = "10.3.1.12"  
@@ -46,34 +46,6 @@ resource "aws_iam_role_policy_attachment" "s3_access" {
   role       = aws_iam_role.ec2_role.name
 }
 
-resource "aws_iam_instance_profile" "ec2_instance_profile" {
-  name = "gpt_server_profile"
-  role = aws_iam_role.ec2_role.name
-}
-
-data "aws_iam_policy_document" "parameter_store_policy" {
-  statement {
-    actions = [
-      "ssm:GetParameter"
-    ]
-
-    resources = [
-      "arn:aws:ssm:*:*:parameter/gpt_api_key"
-    ]
-  }
-}
-
-resource "aws_iam_policy" "parameter_store_policy" {
-  name        = "ParameterStorePolicy"
-  description = "Allows read access to Parameter Store"
-
-  policy = data.aws_iam_policy_document.parameter_store_policy.json
-}
-
-resource "aws_iam_role_policy_attachment" "parameter_store_attachment" {
-  role       = aws_iam_role.ec2_role.name
-  policy_arn = aws_iam_policy.parameter_store_policy.arn
-}
 
 output "Web_server_id" {
   value = aws_instance.web_ec2.id
