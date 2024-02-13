@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 st.title("BIGDaTA_Lab Chatbot")
-openai.api_key = "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"
+openai.api_key = "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"
 logging.basicConfig(filename='../logs/stockGPT.logstockGPT.log',
                     level=logging.INFO, format='%(asctime)s - %(message)s', encoding='utf-8')  # encoding ekleyin
 
@@ -161,9 +161,11 @@ def plot_CPI(country_code, start_year="2000", start_month="1", end_year="2023", 
     # Get the current ticks
     ticks = plt.xticks()[0]
 
-    # Adjust the number of ticks to match the number of labels
     desired_ticks = 10  # Choose the desired number of ticks
-    step = len(df.index) // desired_ticks
+    if len(df.index) > desired_ticks:
+        step = len(df.index) // desired_ticks
+    else:
+        step = 1
     plt.xticks(ticks[::step])
 
 
