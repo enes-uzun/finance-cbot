@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 st.title("BIGDaTA_Lab Chatbot")
-openai.api_key = "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"
+openai.api_key = "OpenAI Key"
 logging.basicConfig(filename='../logs/stockGPT.logstockGPT.log',
                     level=logging.INFO, format='%(asctime)s - %(message)s', encoding='utf-8')  # encoding ekleyin
 
@@ -477,11 +477,10 @@ if prompt := st.chat_input("Hi! How can I help you?"):
                 {"role": "system", "content": veri},
                 {"role": "system", "content": veri2},
                 {"role": "system",
-                 "content": "Sen bir BIGDaTA_Lab Finans Chat botusun. Sen Ekonomi ve Finans alanında uzmansın.Kısa "
-                            "cevap ver.Tüm "
-                            "cevapları "
-                            "ona "
-                            "göre vermelisin."},
+                 "content": "You are a BIGDATA_Lab Finance Chatbot. You are an expert in the fields of Economics and Finance. Provide" 
+                            "short answers. You should" 
+                            "provide all" 
+                            "responses accordingly."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0.4,
