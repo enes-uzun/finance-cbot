@@ -11,8 +11,7 @@ import pandas as pd
 
 st.title("BIGDaTA_Lab Chatbot")
 openai.api_key = "OpenAI Key"
-logging.basicConfig(filename='../logs/stockGPT.logstockGPT.log',
-                    level=logging.INFO, format='%(asctime)s - %(message)s', encoding='utf-8')  # encoding ekleyin
+logging.basicConfig(filename='./stockGPT.logstockGPT.log', level=logging.INFO, format='%(asctime)s - %(message)s', encoding='utf-8')  # encoding ekleyin
 
 CPI_Data_Address = "./Country_Indexes_And_Weights.xlsx"
 
